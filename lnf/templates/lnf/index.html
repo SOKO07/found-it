@@ -1,0 +1,126 @@
+{% extends "lnf/base.html" %}
+
+{% block content %}
+{% load static %}
+
+<form method="get" action="{% url 'lnf:index' %}" id="filter-form" class="mb-2">
+    <div class="search-bar">
+            {{ form.q.label_tag }}<br>
+            <input type="text" name="q" placeholder="Item name or location..." id="id_q">
+    </div>
+    <div>
+        <div class="category-checkboxes">
+            {% for checkbox in form.categories %}
+            <span class="category-item">{{ checkbox }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="options">
+
+        <div>
+            {{ form.found_date.label_tag }}<br>
+            {{ form.found_date }}
+        </div>
+        <div>
+            {{ form.sort_by.label_tag }}<br>
+            {{ form.sort_by }}
+        </div>
+        <div class="checkbox-wrapper">
+            {{ form.include_retrieved }}
+            <label for="{{ form.include_retrieved.id_for_label }}">{{ form.include_retrieved.label }}</label>
+        </div>
+
+        <div class="grow"></div>
+
+        <div class="view-toggle-buttons">
+            <button type="button" id="list-view-btn" class="view-toggle-btn active">List</button>
+            <button type="button" id="grid-view-btn" class="view-toggle-btn">Grid</button>
+        </div>
+        
+    </div>
+</form>
+
+<div id="item-list-container" class="list-view">
+    {% include "lnf/partials/_item_list.html" %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filter-form');
+    const itemListContainer = document.getElementById('item-list-container');
+    const searchInput = form.querySelector('[name="q"]');
+    const apiURL = `{% url 'lnf:items_api' %}`;
+    const listViewBtn = document.getElementById('list-view-btn');
+    const gridViewBtn = document.getElementById('grid-view-btn');
+
+    // Function to set view
+    function setView(view) {
+        if (view === 'grid') {
+            itemListContainer.classList.remove('list-view');
+            itemListContainer.classList.add('grid-view');
+            gridViewBtn.classList.add('active');
+            listViewBtn.classList.remove('active');
+            localStorage.setItem('viewMode', 'grid');
+        } else {
+            itemListContainer.classList.remove('grid-view');
+            itemListContainer.classList.add('list-view');
+            listViewBtn.classList.add('active');
+            gridViewBtn.classList.remove('active');
+            localStorage.setItem('viewMode', 'list');
+        }
+    }
+
+    // View toggling
+    listViewBtn.addEventListener('click', () => setView('list'));
+    gridViewBtn.addEventListener('click', () => setView('grid'));
+
+    // Apply saved view on page load
+    const savedView = localStorage.getItem('viewMode') || 'list';
+    setView(savedView);
+
+    // Debounce function to limit API calls on typing
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    async function updateItems() {
+        const formData = new FormData(form);
+        const params = new URLSearchParams(formData);
+        
+        // Manually handle multiple checkboxes for categories
+        const selectedCategories = Array.from(form.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value);
+        params.delete('categories'); // Remove default handling
+        selectedCategories.forEach(catId => params.append('categories', catId));
+
+        const url = `${apiURL}?${params.toString()}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            itemListContainer.innerHTML = data.html;
+        } catch (error) {
+            console.error('Error fetching items:', error);
+            itemListContainer.innerHTML = '<p>Error loading items. Please try again.</p>';
+        }
+    }
+
+    const debouncedUpdate = debounce(updateItems, 300);
+
+    form.addEventListener('keyup', function(event) {
+        if (event.target.name === 'q') {
+            debouncedUpdate();
+        }
+    });
+
+    form.addEventListener('change', function(event) {
+        // Handles checkboxes, date picker, and select dropdown
+        updateItems();
+    });
+});
+</script>
+
+{% endblock %}

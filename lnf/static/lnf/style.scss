@@ -1,0 +1,197 @@
+$text-size : 18px;
+$text-color : white;
+$main-color : #2B3666;
+
+div {
+    box-sizing: border-box;
+}
+
+nav {
+    display: flex;
+    background-color: $main-color;
+    color: $text-color;
+    font-size: $text-size;
+}
+
+.grow {
+    flex-grow: 1;
+}
+
+nav .vertical-line {
+    display: inline-block;
+    border-left: 1px solid $text-color;
+    height: ($text-size + 12px);
+}
+
+.navbar-brand .h1 {
+    color: $text-color;
+    font-size: ($text-size + 12px);
+}
+
+nav a, a:visited {
+    color: inherit;
+    text-decoration: none;
+    flex-grow: auto;
+    padding: 0 4px 0 4px;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.search-bar {
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 80%;
+    margin-bottom: 10px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.options {
+    display: flex;
+    gap: 20px; 
+    align-items: flex-end; 
+}
+
+.category-checkboxes {
+    width: 80%;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+/* View Toggle Buttons */
+.view-toggle-buttons {
+    display: block;
+}
+
+.view-toggle-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.view-toggle-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* List View (Table-like) */
+#item-list-container.list-view .list-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    font-weight: bold;
+    padding: 5px 0 5px 10px;
+    border-bottom: 2px solid #333;
+    background-color: $main-color;
+    color: $text-color;
+}
+
+#item-list-container.list-view .item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#item-list-container.list-view .item:nth-child(odd) {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+#item-list-container.grid-view .list-header {
+    display: none;
+}
+
+/* Grid View */
+#item-list-container.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+
+#item-list-container.grid-view .item {
+    display: block;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+#item-list-container.grid-view .item:nth-child(odd) {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+#item-list-container.grid-view .item > div { /* Target direct children of .item */
+    display: block;
+    text-align: center; /* Keep text centered if desired */
+}
+
+.hold-button {
+    background-color: #282F4E;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.unhold-button {
+    @extend .hold-button;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .view-toggle-buttons {
+        display: none;
+    }
+
+    #item-list-container.list-view .list-header {
+        display: none;
+    }
+
+    #item-list-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+        /* Override the list-view grid display for items on small screens */
+    #item-list-container.list-view .item {
+        display: block; /* This will make the .item itself a block, allowing its children to stack */
+        grid-template-columns: unset;
+    }
+
+    #item-list-container .item {
+        display: block;
+        border: 1px solid #eee;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        overflow-wrap: break-word;
+    }
+
+    #item-list-container .item > div {
+        display: block;
+        text-align: center;
+    }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LNF</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lnf/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar p-2">
+      <a href="{% url 'lnf:index' %}" class="navbar-brand"><span class="h1">Found IT</span></a>
+      <div class="grow"></div>
+      <div class="me-3"><a href="{% url 'lnf:upload' %}">Upload Item</a></div>
+      <span class="vertical-line"></span>
+      <div class="login ms-3">
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-button"><span>Logout</span></button>
+            </form>
+            <span class="ms-1">Hi {{ user.username }}!</span>
+        {% else %}
+            <a href="{% url 'login' %}" class="ms-1">Login</a>
+            <a href="{% url 'lnf:signup' %}" class="ms-1">Sign Up</a>
+        {% endif %}
+      </div>
+    </nav>
+    <br>
+  <div class="container-fluid">  
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

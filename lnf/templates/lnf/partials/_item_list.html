@@ -1,0 +1,43 @@
+<div class="list-header">
+    <div>Name</div>
+    <div>Category</div>
+    <div>Found Date</div>
+    <div>Found Location</div>
+    <div>Status</div>
+    <div>Action</div>
+</div>
+{% if item_list %}
+    {% for item in item_list %}
+        <div class="item">
+            <div>
+                <strong>{{ item.name }}</strong>
+            </div>
+            <div>
+                {% if item.category %}
+                    {{ item.category }}
+                {% else %}
+                    {{ item.pending_category_name }} (pending)
+                {% endif %}
+            </div>
+            <div>{{ item.found_date }}</div>
+            <div>{{ item.found_location }}</div>
+            <div>{{ item.get_status_display }}</div>
+            <div>
+
+                {% if request.user in item.held_by.all %}
+                    <form action="{% url 'lnf:unhold_item' item.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="unhold-button">Unhold</button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'lnf:hold_item' item.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="hold-button">Hold</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No items match your search criteria. Please try again.</p>
+{% endif %}

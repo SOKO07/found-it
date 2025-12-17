@@ -1,0 +1,53 @@
+{% extends "lnf/base.html" %}
+
+{% block content %}
+{% load static %}
+<h3>Upload an Item</h3>
+<form action="{% url 'lnf:upload' %}" method="post">
+    {% csrf_token %}
+    
+    {% if form.errors %}
+        <div style="color: red;">
+            <p>Please correct the errors below:</p>
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    <p>
+        {{ form.name.label_tag }}<br>
+        {{ form.name }}
+    </p>
+
+    <p>
+        {{ form.category_name.label_tag }}<br>
+        {{ form.category_name }}
+        <datalist id="category-list">
+            {% for category in category_list %}
+                <option value="{{ category.name }}">
+            {% endfor %}
+        </datalist>
+    </p>
+
+    <p>
+        {{ form.description.label_tag }}<br>
+        {{ form.description }}
+    </p>
+
+    <p>
+        {{ form.found_date.label_tag }}<br>
+        {{ form.found_date }}
+    </p>
+
+    <p>
+        {{ form.found_location.label_tag }}<br>
+        {{ form.found_location }}
+    </p>
+
+    <p>
+        {{ form.status.label_tag }}<br>
+        {{ form.status }}
+    </p>
+
+    <button type="submit">Upload</button>
+</form>
+{% endblock %}
