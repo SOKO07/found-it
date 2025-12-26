@@ -2,18 +2,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, BooleanField
+from django.db.models.functions import Lower
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth.views import LoginView
 
 from .models import Category, Item, PendingCategory
-from .forms import ItemForm, SignUpForm, ItemFilterForm
+from .forms import ItemForm, SignUpForm, ItemFilterForm, LoginForm # Import LoginForm
 
-def _filter_and_sort_items(data):
+def _filter_and_sort_items(request):
     """Helper function to filter and sort items based on form data."""
-    item_list = Item.objects.all()
+    item_list = Item.objects.all().select_related('category').prefetch_related('held_by')
     # We pass the data to the form for validation and cleaning
-    form = ItemFilterForm(data)
+    form = ItemFilterForm(request.GET)
 
     if form.is_valid():
         query = form.cleaned_data.get('q')
@@ -33,38 +35,61 @@ def _filter_and_sort_items(data):
             )
         
         if categories:
-            # Filter by items whose category is in the selected categories
             item_list = item_list.filter(category__in=categories)
 
         if found_date:
             item_list = item_list.filter(found_date=found_date)
         
-        if sort_by:
-            item_list = item_list.order_by(sort_by)
-        else:
-            # Default sort if none is provided
-            item_list = item_list.order_by('-found_date')
+        sort_order = sort_by if sort_by else '-found_date'
 
-    return item_list, form
+        # Annotate with a boolean indicating if the item is held by the current user
+        # This allows sorting held items first without separate queries
+        if request.user.is_authenticated:
+            item_list = item_list.annotate(
+                is_held_by_user=Case(
+                    When(held_by=request.user, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField()
+                )
+            ).order_by('-is_held_by_user') # Prioritize held items
+
+        # Determine the ordering expression for case-insensitive sorting
+        if sort_order == 'name':
+            order_expression = Lower('name')
+        elif sort_order == '-name':
+            order_expression = Lower('name').desc()
+        else:
+            order_expression = sort_order
+
+        # Apply the secondary sort order after prioritizing held items
+        # If not authenticated, item_list will not have 'is_held_by_user' annotation
+        if request.user.is_authenticated:
+            item_list = item_list.order_by('-is_held_by_user', order_expression)
+        else:
+            item_list = item_list.order_by(order_expression)
+    
+    return item_list.distinct(), form
 
 def index(request):
     """Main view to display the filter form and the list of items."""
-    item_list, form = _filter_and_sort_items(request.GET)
+    item_list, form = _filter_and_sort_items(request)
+    view_type = request.GET.get('viewMode', 'list') # Get viewMode from URL param or default
     context = {
         'form': form,
         'item_list': item_list,
+        'view_type': view_type,
     }
     return render(request, 'lnf/index.html', context)
 
 def items_api(request):
     """API endpoint to fetch filtered and sorted items as HTML."""
-    item_list, _ = _filter_and_sort_items(request.GET)
+    item_list, _ = _filter_and_sort_items(request)
+    view_type = request.GET.get('viewMode', 'list') # Get viewMode from AJAX request
     # We need the request object in the template for user-specific logic (e.g., hold/unhold buttons)
-    html = render_to_string('lnf/partials/_item_list.html', {'item_list': item_list, 'request': request})
+    html = render_to_string('lnf/partials/_item_list.html', {'item_list': item_list, 'view_type': view_type}, request=request)
     return JsonResponse({'html': html})
 
-def base(request):
-    return render(request, 'lnf/base.html')
+
 
 @login_required
 def upload(request):
@@ -113,14 +138,29 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+class Login(LoginView):
+    form_class = LoginForm
+    template_name = 'registration/login.html'
+
 @login_required
-def hold_item(request, item_id):
+def profile(request):
+    uploaded_items = request.user.uploaded_items.all()
+    watched_items = request.user.held_items.all()
+    context = {
+        'uploaded_items': uploaded_items,
+        'watched_items': watched_items,
+    }
+    return render(request, 'lnf/profile.html', context)
+
+@login_required
+def watch_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     item.held_by.add(request.user)
     return redirect('lnf:index')
 
 @login_required
-def unhold_item(request, item_id):
+def unwatch_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     item.held_by.remove(request.user)
     return redirect('lnf:index')
+

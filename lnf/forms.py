@@ -1,12 +1,24 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from .models import Category, Item
+
+
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'placeholder': 'Username'})
+        self.fields['password'].widget.attrs.update({'placeholder': 'Password'})
 
 
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         fields = ('username', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'placeholder': 'Username'})
+        self.fields['email'].widget.attrs.update({'placeholder': 'Email'})
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -78,4 +90,4 @@ class ItemFilterForm(forms.Form):
         required=False,
         label='Sort by'
     )
-    include_retrieved = forms.BooleanField(required=False, label='Show retrieved items')
+    include_retrieved = forms.BooleanField(required=False, label='Show Retrieved Items')

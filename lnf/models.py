@@ -9,7 +9,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     parent = models.ForeignKey(
         'self',
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='children',
         null=True,
         blank=True
@@ -32,14 +32,14 @@ class Item(models.Model):
     ]
 
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True, db_index=True)
     pending_category_name = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(blank=True)
     found_location = models.CharField(max_length=100)
-    found_date = models.DateField(verbose_name='date found')
+    found_date = models.DateField(verbose_name='date found', db_index=True)
     pub_date = models.DateTimeField(verbose_name='date published')
     uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='uploaded_items')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_at_repository')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_at_repository', db_index=True)
     retrieved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='retrieved_items')
     held_by = models.ManyToManyField(User, blank=True, related_name='held_items')
 

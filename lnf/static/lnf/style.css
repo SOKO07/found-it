@@ -1,37 +1,127 @@
-div {
-  box-sizing: border-box;
+/*
+==============================================
+SCSS file for Lost and Found application
+==============================================
+
+Contents:
+1.  Variables
+2.  Global Styles
+3.  Animations
+4.  Reusable Placeholders & Mixins
+5.  Component Styles
+    - Navbar
+    - Auth (Login/Signup)
+    - Page Controls
+    - Buttons
+    - Item List
+6.  Media Queries
+==============================================
+*/
+/*
+==============================================
+1. Variables
+==============================================
+*/
+/*
+==============================================
+2. Global Styles
+==============================================
+*/
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-nav {
-  display: flex;
-  background-color: #2B3666;
-  color: white;
-  font-size: 18px;
+div {
+  box-sizing: border-box;
 }
 
 .grow {
   flex-grow: 1;
 }
 
-nav .vertical-line {
-  display: inline-block;
-  border-left: 1px solid white;
-  height: 30px;
+/*
+==============================================
+3. Animations
+==============================================
+*/
+@keyframes LeftRightShake {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
-
-.navbar-brand .h1 {
+@keyframes Shake {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+    scale: 1.1;
+  }
+  75% {
+    transform: rotate(-5deg);
+    scale: 1.1;
+  }
+  100% {
+    transform: rotate(0);
+    scale: 1.1;
+  }
+}
+/*
+==============================================
+4. Reusable Placeholders & Mixins
+==============================================
+*/
+.hold-button, .unhold-button, .view-toggle-btn {
+  background-color: #282F4E;
   color: white;
-  font-size: 30px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
 }
 
-nav a, a:visited {
+/*
+==============================================
+5. Component Styles
+==============================================
+*/
+/* --- Navbar --- */
+nav {
+  display: flex;
+  background-color: #2B3666;
+  color: white;
+  font-size: 18px;
+}
+nav a, nav a:visited {
   color: inherit;
   text-decoration: none;
   flex-grow: auto;
   padding: 0 4px 0 4px;
 }
-
-.logout-button {
+nav .vertical-line {
+  display: inline-block;
+  border-left: 1px solid white;
+  height: 30px;
+}
+nav .navbar-brand .h1 {
+  color: white;
+  font-size: 30px;
+}
+nav .logout-button {
   background: none;
   border: none;
   color: inherit;
@@ -40,6 +130,57 @@ nav a, a:visited {
   padding: 0;
 }
 
+/* --- Auth (Login/Signup) --- */
+.auth-container {
+  background-color: #2B3666;
+  height: 100%;
+  display: flex;
+}
+.auth-container .home-img {
+  width: 50%;
+  height: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+.auth-container .auth-form-container {
+  color: white;
+  padding: 20px;
+  height: 100%;
+  width: 50%;
+  box-sizing: border-box;
+  position: relative;
+}
+.auth-container .auth-form {
+  border: 10px solid #282F4E;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+.auth-container .auth-form input[type=text],
+.auth-container .auth-form input[type=password],
+.auth-container .auth-form input[type=email] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+.auth-container .auth-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #282F4E;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.auth-container .auth-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* --- Page Controls --- */
 .search-bar {
   left: 0;
   right: 0;
@@ -47,7 +188,6 @@ nav a, a:visited {
   width: 80%;
   margin-bottom: 10px;
 }
-
 .search-bar input {
   width: 100%;
   padding: 10px;
@@ -70,25 +210,50 @@ nav a, a:visited {
   padding: 10px 0;
 }
 
-/* View Toggle Buttons */
+#toggle-filters-btn {
+  display: none; /* Hidden on desktop */
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#collapsible-filters {
+  display: contents; /* Preserves flex layout on desktop */
+}
+
+/* --- Buttons --- */
 .view-toggle-buttons {
   display: block;
 }
 
-.view-toggle-btn {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 5px 10px;
-  cursor: pointer;
+.view-toggle-btn:hover i {
+  animation: Shake 0.5s;
+  animation-fill-mode: forwards;
 }
-
 .view-toggle-btn.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  opacity: 0.7;
 }
 
-/* List View (Table-like) */
+.hold-button, .unhold-button {
+  border-radius: 5px;
+}
+.hold-button:hover, .unhold-button:hover {
+  animation: Shake 0.7s;
+  animation-fill-mode: forwards;
+}
+
+.unhold-button {
+  opacity: 0.7;
+}
+
+/* --- Item List --- */
+#item-list-container {
+  /* Transient animation for watched items */
+}
 #item-list-container.list-view .list-header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -98,7 +263,6 @@ nav a, a:visited {
   background-color: #2B3666;
   color: white;
 }
-
 #item-list-container.list-view .item {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -107,80 +271,135 @@ nav a, a:visited {
   gap: 10px;
   border-bottom: 1px solid #eee;
 }
-
 #item-list-container.list-view .item:nth-child(odd) {
   background-color: rgba(128, 128, 128, 0.1);
 }
-
+#item-list-container.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
 #item-list-container.grid-view .list-header {
   display: none;
 }
-
-/* Grid View */
-#item-list-container.grid-view {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-}
-
 #item-list-container.grid-view .item {
-  display: block;
-  border: 1px solid #eee;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
 }
-
+#item-list-container.grid-view .item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+#item-list-container.grid-view .item h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2B3666;
+  margin-bottom: 10px;
+}
+#item-list-container.grid-view .item p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+#item-list-container.grid-view .item .item-actions {
+  margin-top: auto;
+  text-align: right;
+}
 #item-list-container.grid-view .item:nth-child(odd) {
   background-color: rgba(128, 128, 128, 0.1);
 }
-
-#item-list-container.grid-view .item > div { /* Target direct children of .item */
-  display: block;
-  text-align: center; /* Keep text centered if desired */
+#item-list-container .item.is-watched {
+  animation: LeftRightShake 0.7s;
 }
 
-.hold-button, .unhold-button {
-  background-color: #282F4E;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
+/* --- Profile Page --- */
+.profile-section {
+  margin-bottom: 2rem;
+}
+.profile-section h2 {
+  border-bottom: 2px solid #2B3666;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.unhold-button {
-  opacity: 0.7;
-}
-
+/*
+==============================================
+6. Media Queries
+==============================================
+*/
 @media (max-width: 768px) {
-  .view-toggle-buttons {
-    display: none;
+  .options {
+    flex-wrap: wrap;
   }
-  #item-list-container.list-view .list-header {
+  .view-toggle-buttons {
     display: none;
   }
   #item-list-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
+    /* Make list items behave like grid items on mobile */
   }
-  /* Override the list-view grid display for items on small screens */
+  #item-list-container.list-view .list-header {
+    display: none;
+  }
   #item-list-container.list-view .item {
-    display: block; /* This will make the .item itself a block, allowing its children to stack */
+    display: block;
     grid-template-columns: unset;
   }
   #item-list-container .item {
-    display: block;
-    border: 1px solid #eee;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
   }
-  #item-list-container .item > div {
+  #item-list-container .item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  #item-list-container .item h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2B3666;
+    margin-bottom: 10px;
+  }
+  #item-list-container .item p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  #item-list-container .item .item-actions {
+    margin-top: auto;
+    text-align: right;
+  }
+  #toggle-filters-btn {
     display: block;
-    text-align: center;
+  }
+  #collapsible-filters {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+  #collapsible-filters.visible {
+    display: flex;
   }
 }/*# sourceMappingURL=style.css.map */

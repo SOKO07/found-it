@@ -1,8 +1,7 @@
-{% extends "lnf/base.html" %}
+{% extends "lnf/navbase.html" %}
 
 {% block content %}
 {% load static %}
-
 <form method="get" action="{% url 'lnf:index' %}" id="filter-form" class="mb-2">
     <div class="search-bar">
             {{ form.q.label_tag }}<br>
@@ -16,32 +15,36 @@
         </div>
     </div>
     <div class="options">
-
-        <div>
-            {{ form.found_date.label_tag }}<br>
-            {{ form.found_date }}
-        </div>
-        <div>
-            {{ form.sort_by.label_tag }}<br>
-            {{ form.sort_by }}
-        </div>
-        <div class="checkbox-wrapper">
-            {{ form.include_retrieved }}
-            <label for="{{ form.include_retrieved.id_for_label }}">{{ form.include_retrieved.label }}</label>
+        <button type="button" id="toggle-filters-btn">Filters</button>
+        <div id="collapsible-filters">
+            <div class="d-flex flex-end gap-3">
+                <div>
+                    {{ form.found_date.label_tag }}<br>
+                    {{ form.found_date }}
+                </div>
+                <div>
+                    {{ form.sort_by.label_tag }}<br>
+                    {{ form.sort_by }}
+                </div>
+            </div>
+            <div class="checkbox-wrapper">
+                {{ form.include_retrieved }}
+                <label for="{{ form.include_retrieved.id_for_label }}">{{ form.include_retrieved.label }}</label>
+            </div>
         </div>
 
         <div class="grow"></div>
 
         <div class="view-toggle-buttons">
-            <button type="button" id="list-view-btn" class="view-toggle-btn active">List</button>
-            <button type="button" id="grid-view-btn" class="view-toggle-btn">Grid</button>
+            <button type="button" id="list-view-btn" class="view-toggle-btn active"><i class="fa-solid fa-list"></i></button>
+            <button type="button" id="grid-view-btn" class="view-toggle-btn"><i class="fa-solid fa-border-all"></i></button>
         </div>
         
     </div>
 </form>
 
-<div id="item-list-container" class="list-view">
-    {% include "lnf/partials/_item_list.html" %}
+<div id="item-list-container" class="{{ view_type }}-view"> {# Dynamically set initial view class #}
+    {% include "lnf/partials/_item_list.html" with item_list=item_list view_type=view_type %}
 </div>
 
 <script>
@@ -52,6 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiURL = `{% url 'lnf:items_api' %}`;
     const listViewBtn = document.getElementById('list-view-btn');
     const gridViewBtn = document.getElementById('grid-view-btn');
+
+    const toggleBtn = document.getElementById('toggle-filters-btn');
+    const filtersContainer = document.getElementById('collapsible-filters');
+
+    if (toggleBtn && filtersContainer) {
+        toggleBtn.addEventListener('click', () => {
+            filtersContainer.classList.toggle('visible');
+        });
+    }
 
     // Function to set view
     function setView(view) {
@@ -68,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             gridViewBtn.classList.remove('active');
             localStorage.setItem('viewMode', 'list');
         }
+        updateItems(); // Call updateItems after changing view
     }
 
     // View toggling
@@ -76,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Apply saved view on page load
     const savedView = localStorage.getItem('viewMode') || 'list';
-    setView(savedView);
+    setView(savedView); // This call will now trigger updateItems()
 
     // Debounce function to limit API calls on typing
     function debounce(func, delay) {
@@ -95,6 +108,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedCategories = Array.from(form.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value);
         params.delete('categories'); // Remove default handling
         selectedCategories.forEach(catId => params.append('categories', catId));
+
+        // Add current viewMode to parameters for API call
+        params.append('viewMode', localStorage.getItem('viewMode') || 'list'); // Pass current viewMode to API
 
         const url = `${apiURL}?${params.toString()}`;
 

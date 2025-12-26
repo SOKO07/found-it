@@ -1,10 +1,30 @@
 {% extends "lnf/base.html" %}
+{% load static %}
 
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
+<div class="auth-container">
+  <img src="{% static 'lnf/images/home.png' %}" class="home-img">
+  <div class="auth-form-container float-start">  
+    <div class="auth-form">
+      <h2>Sign up</h2>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-field">
+            {{ field.errors }}
+            {{ field }}
+          </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+          <div class="non-field-errors">
+            {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

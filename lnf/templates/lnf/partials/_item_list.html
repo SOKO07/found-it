@@ -1,3 +1,4 @@
+{% if view_type == 'list' %}
 <div class="list-header">
     <div>Name</div>
     <div>Category</div>
@@ -6,34 +7,42 @@
     <div>Status</div>
     <div>Action</div>
 </div>
+{% endif %}
 {% if item_list %}
     {% for item in item_list %}
-        <div class="item">
-            <div>
-                <strong>{{ item.name }}</strong>
-            </div>
-            <div>
-                {% if item.category %}
-                    {{ item.category }}
-                {% else %}
-                    {{ item.pending_category_name }} (pending)
-                {% endif %}
-            </div>
-            <div>{{ item.found_date }}</div>
-            <div>{{ item.found_location }}</div>
-            <div>{{ item.get_status_display }}</div>
-            <div>
-
-                {% if request.user in item.held_by.all %}
-                    <form action="{% url 'lnf:unhold_item' item.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="unhold-button">Unhold</button>
-                    </form>
-                {% else %}
-                    <form action="{% url 'lnf:hold_item' item.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="hold-button">Hold</button>
-                    </form>
+        <div class="item {% if item.is_held_by_user %}is-watched{% endif %}">
+            {% if view_type == 'list' %}
+                <div>
+                    <strong>{{ item.name }}</strong>
+                </div>
+                <div>
+                    {% if item.category %}{{ item.category }}{% else %}{{ item.pending_category_name }} (pending){% endif %}
+                </div>
+                <div>{{ item.found_date }}</div>
+                <div>{{ item.found_location }}</div>
+                <div>{{ item.get_status_display }}</div>
+            {% else %} {# Grid view structure #}
+                <h4>{{ item.name }}</h4>
+                <p>
+                    <strong>Category:</strong> {% if item.category %}{{ item.category }}{% else %}{{ item.pending_category_name }} (pending){% endif %}<br>
+                    <strong>Found on:</strong> {{ item.found_date }}<br>
+                    <strong>Found at:</strong> {{ item.found_location }}<br>
+                    <strong>Status:</strong> {{ item.get_status_display }}
+                </p>
+            {% endif %}
+            <div class="item-actions">
+                {% if item.status != 'retrieved' %}
+                    {% if request.user in item.held_by.all %}
+                        <form action="{% url 'lnf:unwatch_item' item.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="unhold-button"><i class="fa-solid fa-eye"></i></button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'lnf:watch_item' item.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="hold-button"><i class="fa-solid fa-eye"></i></button>
+                        </form>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

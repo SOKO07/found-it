@@ -1,0 +1,29 @@
+{% extends "lnf/navbase.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4 text-center">My Profile</h1>
+
+    <div class="profile-section">
+        <h2>My Uploads</h2>
+        <div id="uploaded-items-container" class="grid-view">
+            {% if uploaded_items %}
+                {% include "lnf/partials/_item_list.html" with item_list=uploaded_items view_type='grid' %}
+            {% else %}
+                <p>You haven't uploaded any items yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="profile-section mt-5">
+        <h2>My Watched Items</h2>
+        <div id="watched-items-container" class="grid-view">
+            {% if watched_items %}
+                {% include "lnf/partials/_item_list.html" with item_list=watched_items view_type='grid' %}
+            {% else %}
+                <p>You aren't watching any items.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
