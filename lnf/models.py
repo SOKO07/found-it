@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import FileExtensionValidator
 
 # Create your models here.
 class Category(models.Model):
@@ -35,6 +36,12 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True, db_index=True)
     pending_category_name = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(blank=True)
+    image = models.ImageField(
+        upload_to='item_images/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'])]
+    )
     found_location = models.CharField(max_length=100)
     found_date = models.DateField(verbose_name='date found', db_index=True)
     pub_date = models.DateTimeField(verbose_name='date published')

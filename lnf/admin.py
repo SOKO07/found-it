@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import Category, Item, PendingCategory
 
 @admin.action(description='Approve selected pending categories')
@@ -22,16 +23,22 @@ class PendingCategoryAdmin(admin.ModelAdmin):
     actions = [approve_categories]
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'status', 'get_holding_users', 'found_date', 'pub_date', 'uploaded_by')
+    list_display = ('name', 'category', 'status', 'get_holding_users', 'found_date', 'pub_date', 'uploaded_by', 'display_image')
     list_filter = ('status', 'found_date', 'pub_date', 'uploaded_by')
     list_editable = ('status',)
     search_fields = ('name', 'description')
-    readonly_fields = ('get_holding_users',)
+    readonly_fields = ('get_holding_users', 'display_image')
     autocomplete_fields = ('retrieved_by',)
 
     def get_holding_users(self, obj):
         return ", ".join([user.username for user in obj.held_by.all()])
     get_holding_users.short_description = 'Holding Users'
+
+    def display_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="100" />', obj.image.url)
+        return "No Image"
+    display_image.short_description = 'Image'
 
 admin.site.register(Category)
 admin.site.register(Item, ItemAdmin)

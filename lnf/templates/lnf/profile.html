@@ -6,9 +6,9 @@
 
     <div class="profile-section">
         <h2>My Uploads</h2>
-        <div id="uploaded-items-container" class="grid-view">
+        <div class="item-list-container grid-view">
             {% if uploaded_items %}
-                {% include "lnf/partials/_item_list.html" with item_list=uploaded_items view_type='grid' %}
+                {% include "lnf/partials/_item_list.html" with item_list=uploaded_items view_type='grid' show_delete_button=True %}
             {% else %}
                 <p>You haven't uploaded any items yet.</p>
             {% endif %}
@@ -17,7 +17,7 @@
 
     <div class="profile-section mt-5">
         <h2>My Watched Items</h2>
-        <div id="watched-items-container" class="grid-view">
+        <div class="item-list-container grid-view">
             {% if watched_items %}
                 {% include "lnf/partials/_item_list.html" with item_list=watched_items view_type='grid' %}
             {% else %}
@@ -27,3 +27,62 @@
     </div>
 </div>
 {% endblock %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // There might be two containers: one for uploads and one for watched items.
+    // We should attach the listener to a common ancestor or to each of them.
+    const containers = document.querySelectorAll('.item-list-container');
+
+    containers.forEach(container => {
+        container.addEventListener('submit', async function(event) {
+            if (event.target.classList.contains('delete-item-form')) {
+                event.preventDefault();
+                
+                const form = event.target;
+                const url = form.action;
+                const formData = new FormData(form);
+                const csrfToken = formData.get('csrfmiddlewaretoken');
+
+                // The original implementation had a confirm dialog in the onclick attribute.
+                // We've moved that logic here to ensure it runs before the async request.
+                if (confirm('Are you sure you want to delete this item?')) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest' // Often good practice for AJAX
+                            },
+                            // No body is needed if we're not sending additional data beyond the URL
+                        });
+
+                        const data = await response.json();
+
+                        if (data.status === 'ok') {
+                            const itemElement = form.closest('.item');
+                            if (itemElement) {
+                                // Optional: Add an animation before removing
+                                itemElement.style.transition = 'opacity 0.5s ease';
+                                itemElement.style.opacity = '0';
+                                setTimeout(() => itemElement.remove(), 500);
+                            }
+                            // Check if the container is now empty
+                            if(container.querySelectorAll('.item').length <= 1) { // <=1 because the item is not yet removed
+                                const emptyMessage = container.parentElement.querySelector('p');
+                                if(emptyMessage) emptyMessage.style.display = 'block';
+                            }
+                        } else {
+                            alert(data.message || 'You do not have permission to delete this item.');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting item:', error);
+                        alert('An error occurred while deleting the item. Please try again.');
+                    }
+                }
+            }
+        });
+    });
+});
+</script>
+

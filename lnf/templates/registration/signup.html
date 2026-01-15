@@ -4,15 +4,25 @@
 {% block content %}
 <div class="auth-container">
   <img src="{% static 'lnf/images/home.png' %}" class="home-img">
-  <div class="auth-form-container float-start">  
+  <div class="auth-form-container float-start">
     <div class="auth-form">
       <h2>Sign up</h2>
       <form method="post">
         {% csrf_token %}
         {% for field in form %}
+          {# Debug: field.name={{ field.name }}, field.label={{ field.label }} #}
           <div class="form-field">
-            {{ field.errors }}
-            {{ field }}
+            {% if field.name == 'password1' or field.name == 'password2' %}
+              {# <label for="{{ field.id_for_label }}">{{ field.label }}</label> #}
+              <div class="password-wrapper">
+                {{ field }}
+                <button type="button" class="toggle-password">Show</button>
+              </div>
+              {{ field.errors }}
+            {% else %}
+              {{ field }}
+              {{ field.errors }}
+            {% endif %}
           </div>
         {% endfor %}
         {% if form.non_field_errors %}
@@ -22,9 +32,52 @@
             {% endfor %}
           </div>
         {% endif %}
-        <button type="submit">Sign up</button>
+        <button class="submit-button" type="submit">Sign up</button>
       </form>
     </div>
   </div>
 </div>
+
+<style>
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 60px; /* space for the button */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+
+  togglePasswordButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const passwordInput = this.parentElement.querySelector('input');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        this.textContent = 'Hide';
+      } else {
+        passwordInput.type = 'password';
+        this.textContent = 'Show';
+      }
+    });
+  });
+});
+</script>
 {% endblock %}

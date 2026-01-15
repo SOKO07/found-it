@@ -13,12 +13,14 @@ class LoginForm(AuthenticationForm):
 
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        fields = ('username', 'email')
+        fields = ("username", "email")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'placeholder': 'Username'})
-        self.fields['email'].widget.attrs.update({'placeholder': 'Email'})
+        self.fields['email'].widget.attrs.update({'placeholder': 'School Email'})
+        self.fields['password1'].widget.attrs.update({'placeholder': 'Password'})
+        self.fields['password2'].widget.attrs.update({'placeholder': 'Confirm Password'})
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -44,9 +46,10 @@ class ItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ['name', 'description', 'found_location', 'found_date', 'status']
+        fields = ['name', 'description', 'image', 'found_location', 'found_date', 'status']
         widgets = {
             'found_date': forms.DateInput(attrs={'type': 'date'}),
+            'description': forms.Textarea(attrs={'rows': 2}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -68,7 +71,7 @@ class ItemFilterForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Item name or location...'})
     )
     categories = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(),
+        queryset=Category.objects.all().order_by('name'),
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'checkbox-inline'}),
         label='Categories'

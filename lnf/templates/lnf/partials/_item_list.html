@@ -22,6 +22,9 @@
                 <div>{{ item.found_location }}</div>
                 <div>{{ item.get_status_display }}</div>
             {% else %} {# Grid view structure #}
+                {% if item.image and request.user == item.uploaded_by %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+                {% endif %}
                 <h4>{{ item.name }}</h4>
                 <p>
                     <strong>Category:</strong> {% if item.category %}{{ item.category }}{% else %}{{ item.pending_category_name }} (pending){% endif %}<br>
@@ -31,17 +34,25 @@
                 </p>
             {% endif %}
             <div class="item-actions">
-                {% if item.status != 'retrieved' %}
-                    {% if request.user in item.held_by.all %}
-                        <form action="{% url 'lnf:unwatch_item' item.id %}" method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="unhold-button"><i class="fa-solid fa-eye"></i></button>
-                        </form>
+                {% if request.user == item.uploaded_by %}
+                    {% if show_delete_button %}
+                        {% if item.status != 'retrieved' %}
+                            <form action="{% url 'lnf:delete_item' item.id %}" method="post" style="display: inline;" class="delete-item-form">
+                                {% csrf_token %}
+                                <button type="submit" class="hold-button" title="Delete Item" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                        {% endif %}
                     {% else %}
-                        <form action="{% url 'lnf:watch_item' item.id %}" method="post" style="display: inline;">
+                        <form action="{% url 'lnf:go_to_my_uploads' %}" method="post" style="display: inline;">
                             {% csrf_token %}
-                            <button type="submit" class="hold-button"><i class="fa-solid fa-eye"></i></button>
+                            <button type="submit" class="hold-button" title="My Uploads"><i class="fa-solid fa-box-archive"></i></button>
                         </form>
+                    {% endif %}
+                {% else %}
+                    {% if item.status != 'retrieved' %}
+                        <button type="button" class="toggle-watch-btn {% if request.user in item.held_by.all %}unhold-button{% else %}hold-button{% endif %}" data-item-id="{{ item.id }}" data-toggle-url="{% url 'lnf:toggle_watch_item' item.id %}" title="{% if request.user in item.held_by.all %}Unwatch Item{% else %}Watch Item{% endif %}">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
                     {% endif %}
                 {% endif %}
             </div>

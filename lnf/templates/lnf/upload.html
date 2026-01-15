@@ -2,52 +2,117 @@
 
 {% block content %}
 {% load static %}
-<h3>Upload an Item</h3>
-<form action="{% url 'lnf:upload' %}" method="post">
-    {% csrf_token %}
-    
-    {% if form.errors %}
-        <div style="color: red;">
-            <p>Please correct the errors below:</p>
-            {{ form.errors }}
+<div class="auth-container upload-page">
+  <div class="auth-form-container">  
+    <div class="auth-form">
+      <h2>Upload an Item</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div style="color: red;">
+                <p>Please correct the errors below:</p>
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <p>
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    {{ form.category_name.label_tag }}
+                    {{ form.category_name }}
+                    <datalist id="category-list">
+                        {% for category in category_list %}
+                            <option value="{{ category.name }}">
+                        {% endfor %}
+                    </datalist>
+                </p>
+            </div>
         </div>
-    {% endif %}
 
-    <p>
-        {{ form.name.label_tag }}<br>
-        {{ form.name }}
-    </p>
+        <div class="row mb-3">
+            <div class="col-12">
+                <p>
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                </p>
+            </div>
+        </div>
 
-    <p>
-        {{ form.category_name.label_tag }}<br>
-        {{ form.category_name }}
-        <datalist id="category-list">
-            {% for category in category_list %}
-                <option value="{{ category.name }}">
-            {% endfor %}
-        </datalist>
-    </p>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <p>
+                    {{ form.found_location.label_tag }}
+                    {{ form.found_location }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    {{ form.found_date.label_tag }}
+                    {{ form.found_date }}
+                </p>
+            </div>
+        </div>
 
-    <p>
-        {{ form.description.label_tag }}<br>
-        {{ form.description }}
-    </p>
+        <div class="row mb-3">
+            <div class="col-12">
+                <p>
+                    {{ form.status.label_tag }}
+                    {{ form.status }}
+                </p>
+            </div>
+        </div>
 
-    <p>
-        {{ form.found_date.label_tag }}<br>
-        {{ form.found_date }}
-    </p>
+        <div class="row mb-3">
+            <div class="col-12">
+                <p>
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                </p>
+            </div>
+        </div>
 
-    <p>
-        {{ form.found_location.label_tag }}<br>
-        {{ form.found_location }}
-    </p>
+        <div class="row mb-3">
+            <div class="col-12 text-center">
+                <button type="submit" class="submit-button btn btn-primary">Upload</button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="image-preview-container">
+    <div id="previewWrapper">
+      <img id="imagePreview" src="{% static 'lnf/images/upload.png' %}" alt="Image preview">
+      <span id="previewText">Upload Image for Preview</span>
+    </div>
+  </div>
+</div>
 
-    <p>
-        {{ form.status.label_tag }}<br>
-        {{ form.status }}
-    </p>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('id_image');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewText = document.getElementById('previewText');
 
-    <button type="submit">Upload</button>
-</form>
+    if (imageInput && imagePreview && previewText) {
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.opacity = 1;
+                    previewText.style.display = 'none';
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

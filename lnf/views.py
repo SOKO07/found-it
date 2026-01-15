@@ -51,7 +51,8 @@ def _filter_and_sort_items(request):
                     default=Value(False),
                     output_field=BooleanField()
                 )
-            ).order_by('-is_held_by_user') # Prioritize held items
+            )
+
 
         # Determine the ordering expression for case-insensitive sorting
         if sort_order == 'name':
@@ -62,7 +63,6 @@ def _filter_and_sort_items(request):
             order_expression = sort_order
 
         # Apply the secondary sort order after prioritizing held items
-        # If not authenticated, item_list will not have 'is_held_by_user' annotation
         if request.user.is_authenticated:
             item_list = item_list.order_by('-is_held_by_user', order_expression)
         else:
@@ -97,7 +97,7 @@ def upload(request):
     category_list = Category.objects.all()
     
     if request.method == 'POST':
-        form = ItemForm(request.POST, user=request.user)
+        form = ItemForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             item = form.save(commit=False)
             item.pub_date = timezone.now()
@@ -152,15 +152,29 @@ def profile(request):
     }
     return render(request, 'lnf/profile.html', context)
 
+from django.views.decorators.csrf import csrf_protect
+
+@csrf_protect
 @login_required
-def watch_item(request, item_id):
+def toggle_watch_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    item.held_by.add(request.user)
-    return redirect('lnf:index')
+    if request.user in item.held_by.all():
+        item.held_by.remove(request.user)
+        watched = False
+    else:
+        item.held_by.add(request.user)
+        watched = True
+    return JsonResponse({'status': 'ok', 'watched': watched})
 
 @login_required
-def unwatch_item(request, item_id):
+def delete_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    item.held_by.remove(request.user)
-    return redirect('lnf:index')
+    if request.user == item.uploaded_by and item.status != 'retrieved':
+        item.delete()
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error', 'message': 'You do not have permission to delete this item.'})
+
+@login_required
+def go_to_my_uploads(request):
+    return redirect('lnf:profile')
 

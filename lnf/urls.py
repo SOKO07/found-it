@@ -13,6 +13,7 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login/", views.Login.as_view(), name="login"), # Custom Login View
     path('logout/', auth_views.LogoutView.as_view(next_page='lnf:index'), name='logout'),
-    path("<int:item_id>/watch/", views.watch_item, name="watch_item"),
-    path("<int:item_id>/unwatch/", views.unwatch_item, name="unwatch_item"),
+    path("item/<int:item_id>/toggle_watch/", views.toggle_watch_item, name="toggle_watch_item"),
+    path('item/<int:item_id>/delete/', views.delete_item, name='delete_item'),
+    path('go_to_my_uploads/', views.go_to_my_uploads, name='go_to_my_uploads'),
 ]

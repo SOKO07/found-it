@@ -21,7 +21,7 @@
                 {% csrf_token %}
                 <button type="submit" class="logout-button"><span>Logout</span></button>
             </form>
-            <span class="ms-1 fw-bold">Hi <a href="{% url 'lnf:profile' %}" style="text-decoration: underline;">{{ user.username }}</a>!</span>
+            <span class="ms-1 fw-bold" title="profile">Hi <a href="{% url 'lnf:profile' %}" style="text-decoration: underline;">{{ user.username }}</a>!</span>
         {% else %}
             <a href="{% url 'lnf:login' %}" class="ms-1">Login</a>
             <a href="{% url 'lnf:signup' %}" class="ms-1">Sign Up</a>
@@ -35,5 +35,98 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.body.addEventListener('click', async function(event) {
+        const toggleBtn = event.target.closest('.toggle-watch-btn');
+        if (!toggleBtn) return;
+
+        // If we are on the main item list page, the logic is handled by a different script
+        if (document.getElementById('filter-form')) {
+            return;
+        }
+
+        event.preventDefault();
+
+        // Check if the item is currently watched and the action will be to unwatch
+        if (toggleBtn.title === 'Unwatch Item') {
+            if (!confirm('Do you really want to unwatch this item?')) {
+                return; // User cancelled the unwatch action
+            }
+        }
+
+        const toggleUrl = toggleBtn.dataset.toggleUrl;
+        const csrfToken = getCookie('csrftoken');
+
+        try {
+            const response = await fetch(toggleUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Toggle button appearance
+                if (data.watched) {
+                    toggleBtn.title = 'Unwatch Item';
+                    toggleBtn.classList.remove('hold-button');
+                    toggleBtn.classList.add('unhold-button');
+                } else {
+                    toggleBtn.title = 'Watch Item';
+                    toggleBtn.classList.remove('unhold-button');
+                    toggleBtn.classList.add('hold-button');
+                }
+                
+                // Decide how to update the UI
+                if (typeof updateItems === 'function') {
+                    // On index page, call updateItems to refresh the whole list
+                    updateItems(); 
+                } else {
+                    // On profile page, if an item is unwatched, hide it.
+                    if (!data.watched && toggleBtn.closest('.profile-section')) {
+                         const watchedItemsSection = toggleBtn.closest('.profile-section');
+                         if(watchedItemsSection.querySelector('h2').innerText === 'My Watched Items') {
+                            // Use a fade-out animation then remove, or just hide
+                            const itemElement = toggleBtn.closest('.item');
+                            itemElement.style.transition = 'opacity 0.5s ease';
+                            itemElement.style.opacity = '0';
+                            setTimeout(() => {
+                                itemElement.style.display = 'none';
+                            }, 500);
+                         }
+                    }
+                }
+
+            } else {
+                console.error('Failed to toggle watch status:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error toggling watch status:', error);
+        }
+    });
+});
+</script>
 </body>
 </html>
