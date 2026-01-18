@@ -22,7 +22,7 @@
                 <div>{{ item.found_location }}</div>
                 <div>{{ item.get_status_display }}</div>
             {% else %} {# Grid view structure #}
-                {% if item.image and request.user == item.uploaded_by %}
+                {% if item.image and on_profile_page and request.user == item.uploaded_by %}
                     <img src="{{ item.image.url }}" alt="{{ item.name }}" style="max-width: 100%; height: auto; margin-bottom: 10px;">
                 {% endif %}
                 <h4>{{ item.name }}</h4>
@@ -50,9 +50,15 @@
                     {% endif %}
                 {% else %}
                     {% if item.status != 'retrieved' %}
-                        <button type="button" class="toggle-watch-btn {% if request.user in item.held_by.all %}unhold-button{% else %}hold-button{% endif %}" data-item-id="{{ item.id }}" data-toggle-url="{% url 'lnf:toggle_watch_item' item.id %}" title="{% if request.user in item.held_by.all %}Unwatch Item{% else %}Watch Item{% endif %}">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
+                        {% if request.user.is_authenticated %}
+                            <button type="button" class="toggle-watch-btn {% if request.user in item.held_by.all %}unhold-button{% else %}hold-button{% endif %}" data-item-id="{{ item.id }}" data-toggle-url="{% url 'lnf:toggle_watch_item' item.id %}" title="{% if request.user in item.held_by.all %}Unwatch Item{% else %}Watch Item{% endif %}">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        {% else %}
+                            <a href="{% url 'lnf:login' %}" class="hold-button" title="Log in to watch this item">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>

@@ -5,6 +5,8 @@ from .models import Category, Item
 
 
 class LoginForm(AuthenticationForm):
+    remember_me = forms.BooleanField(required=False, initial=True)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'placeholder': 'Username'})

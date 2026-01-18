@@ -8,7 +8,7 @@
         <h2>My Uploads</h2>
         <div class="item-list-container grid-view">
             {% if uploaded_items %}
-                {% include "lnf/partials/_item_list.html" with item_list=uploaded_items view_type='grid' show_delete_button=True %}
+                {% include "lnf/partials/_item_list.html" with item_list=uploaded_items view_type='grid' show_delete_button=True on_profile_page=True %}
             {% else %}
                 <p>You haven't uploaded any items yet.</p>
             {% endif %}
@@ -25,7 +25,7 @@
             {% endif %}
         </div>
     </div>
-</div>
+</div><br>
 {% endblock %}
 
 <script>

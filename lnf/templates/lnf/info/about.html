@@ -1,0 +1,55 @@
+{% extends "lnf/base.html" %}
+
+{% block content %}
+<div class="about-container">
+    <div class="bg-img">
+            <h1 title="Start Now"><a href="{% url 'lnf:index' %}">FOUND IT</a></h1>
+            <p>WHERE LOST ITEMS FIND THEIR WAY BACK</p>
+            <br>
+
+            <div class="gallery">
+                <div class="gallery-card">
+                    <div class="overlay">
+                        <p class="big-content-text">Ace Justin D. Cocoy<br><span>Researcher</span></p>
+                    </div>
+                    <img src="/static/lnf/images/PFP/Cocoy.jpg">
+                </div>
+                <div class="gallery-card">
+                    <div class="overlay">
+                        <p class="big-content-text">Blessed Czarhuelle V. Gonzales<br><span>Content Writer</span></p>
+                    </div>
+                    <img src="/static/lnf/images/PFP/Gonzales.jpg">
+                </div>
+                <div class="gallery-card">
+                    <div class="overlay">
+                        <p class="big-content-text">Seokho Lee<br><span>Chairman / Web Developer</span></p>
+                    </div>
+                    <img src="/static/lnf/images/PFP/Lee.jpg">
+                </div>
+                <div class="gallery-card">
+                    <div class="overlay">
+                        <p class="big-content-text">Reighman E. Mejica<br><span>Co-Chairman</span></p>
+                    </div>
+                    <img src="/static/lnf/images/PFP/Mejica.jpg">
+                </div>
+                <div class="gallery-card">
+                    <div class="overlay">
+                        <p class="big-content-text">Lyan Antonia B. Villaruel<br><span>Graphic Designer</span></p>
+                    </div>
+                    <img src="/static/lnf/images/PFP/Villaruel.jpg">
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <div class="vision">
+                <h4>Vision</h4>
+                <p>Found IT envisions a future where owners instantly find their belongings without effort. Our goal is to inspire other institutions to integrate our system within their boundaries to ensure the certainty of recovering items.</p>
+            </div>
+            <div class="mission">
+                <h4>Mission</h4>
+                <p>Our mission is to offer a reliable and user-friendly website that assists users in recovering their items efficiently. We attempt to provide an innovative approach to handling lost items, ensuring users can regain them quickly. At Found It, we believe that technology can reshape the standard of lost and found methods.</p>
+            </div>
+        </div>
+</div>
+{% endblock %}

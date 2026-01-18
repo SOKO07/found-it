@@ -3,18 +3,31 @@
 
 {% block content %}
 <div class="auth-container">
-  <img class="home-img" src="{% static 'lnf/images/home.png' %}" alt="My Image">
+  <div class="home-container">
+    <img src="{% static 'lnf/images/home.png' %}" alt="My Image">
+    <div class="home-logo">
+      <h1><a href="{% url 'lnf:index' %}">FOUND IT</a></h1>
+      <p>WHERE LOST ITEMS FIND THEIR WAY BACK</p>
+    </div>
+  </div>
   <div class="auth-form-container float-start">  
     <div class="auth-form">
-      <h2>Login</h2>
+      <h2>Log In</h2>
       <form method="post">
         {% csrf_token %}
-        {% for field in form %}
-          <div class="form-field">
-            {{ field.errors }}
-            {{ field }}
-          </div>
-        {% endfor %}
+        <div class="form-field">
+            {{ form.username.errors }}
+            {{ form.username }}
+        </div>
+        <div class="form-field">
+            {{ form.password.errors }}
+            {{ form.password }}
+        </div>
+        <div class="form-field remember-me">
+            {{ form.remember_me.errors }}
+            {{ form.remember_me }}
+            <label for="{{ form.remember_me.id_for_label }}">Remember me</label>
+        </div>
         {% if form.non_field_errors %}
           <div class="non-field-errors">
             {% for error in form.non_field_errors %}
@@ -22,10 +35,10 @@
             {% endfor %}
           </div>
         {% endif %}
-        <button class="submit-button" type="submit">Login</button>
+        <button class="submit-button" type="submit">Log In</button>
       </form>
       <br>
-      <p>Don't have an account? <a href="{% url 'lnf:signup' %}">Sign up</a></p>
+      <p>Don't have an account? <a href="{% url 'lnf:signup' %}">Create Account</a></p>
     </div>
   </div>
 </div>

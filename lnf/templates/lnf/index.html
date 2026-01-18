@@ -4,7 +4,6 @@
 {% load static %}
 <form method="get" action="{% url 'lnf:index' %}" id="filter-form" class="mb-3">
     <div class="search-bar">
-            {{ form.q.label_tag }}<br>
             <input type="text" name="q" placeholder="Item name or location..." id="id_q">
     </div>
     <div>
@@ -17,7 +16,6 @@
     <div class="options">
         <button type="button" id="toggle-filters-btn">Filters</button>
         <div id="collapsible-filters">
-            <div class="d-flex flex-end gap-3">
                 <div>
                     {{ form.found_date.label_tag }}<br>
                     {{ form.found_date }}
@@ -26,7 +24,6 @@
                     {{ form.sort_by.label_tag }}<br>
                     {{ form.sort_by }}
                 </div>
-            </div>
             <div class="checkbox-wrapper">
                 {{ form.include_retrieved }}
                 <label for="{{ form.include_retrieved.id_for_label }}">{{ form.include_retrieved.label }}</label>
@@ -46,6 +43,7 @@
 <div class="item-list-container {{ view_type }}-view"> {# Dynamically set initial view class #}
     {% include "lnf/partials/_item_list.html" with item_list=item_list view_type=view_type %}
 </div>
+<br>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -188,6 +186,17 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('change', function(event) {
         // Handles checkboxes, date picker, and select dropdown
         updateItems();
+    });
+
+    let wasDesktop = window.innerWidth > 768;
+    window.addEventListener('resize', () => {
+        const isDesktop = window.innerWidth > 768;
+        if (wasDesktop && !isDesktop) {
+            if (localStorage.getItem('viewMode') !== 'grid') {
+                gridViewBtn.click();
+            }
+        }
+        wasDesktop = isDesktop;
     });
 });
 </script>

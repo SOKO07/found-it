@@ -25,9 +25,12 @@ Contents:
 */
 $text-size : 18px;
 $text-color : white;
+$sub-text-color : #cbcbcb;
 $main-color : #2B3666;
 $sub-color : #282F4E;
+$accent-color : #ffc107/*#F68748*/;
 $acc-color : #5854b5;
+$hover-color : #3C4A99;
 
 /*
 ==============================================
@@ -82,6 +85,7 @@ div {
     border: 1px solid #ccc;
     padding: 5px 10px;
     cursor: pointer;
+    opacity: 0.7;
 }
 
 // Style for grid view items (card design)
@@ -163,21 +167,169 @@ nav {
     }
 }
 
+
+.bg-img {
+    width: 100%;
+    min-height: 600px; // Changed from height
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-image: url("images/home.png");
+    padding: 20px 20px 80px 20px; // Added padding-bottom
+    text-align: center;
+    color: $text-color;
+
+    >h1 {
+        font-size: 5rem;
+        margin: 0;
+
+            a {
+                color: $text-color;
+                text-decoration: none;
+            }
+        }
+    >p {
+        font-size: 1.2rem;
+        font-style: italic;
+        margin: 10px 0 0 0;
+    }
+}
+
+.gallery {
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;       // Revert to flexbox
+    flex-wrap: wrap;     // Allow wrapping
+    justify-content: center; // Center items
+    gap: 20px;           // Keep gap
+}
+
+.gallery-card {
+    display: inline-block;
+    width: 250px;
+    height: 350px;
+    position: relative;
+    overflow: hidden;
+    transition: top 0.5s, transform 0.5s;
+
+    span {
+        font-style: italic;
+        font-size: smaller;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.gallery-card:hover {
+    transform: scale(1.1);
+}
+
+.overlay {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0, 0.5);
+    color: white;
+    transition: all 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.big-content-text {
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+}
+
+.gallery-card:hover .overlay {
+    top: 0;
+}
+
+.explanation {
+    width: 80%;
+    display: flex;
+    margin: auto;
+    position: relative;
+    top: -55px;
+    justify-content: space-evenly;
+    text-align: justify;
+    color: $text-color;
+
+    div {
+        width: 40%;
+        background-color: $sub-color;
+        border-radius: 10px;
+        padding: 20px;
+        border: 2px solid $accent-color;
+        opacity: 0.95;
+
+        h4 {
+            margin-bottom: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+    }
+}
+
+
 /* --- Auth (Login/Signup) --- */
 .auth-container {
     background-color: $main-color;
     height: 100%;
     display: flex;
 
-    .home-img {
+    .home-container {
         width: 50%;
         height: 100%;
         display: block;
         box-sizing: border-box;
+        position: relative;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
+        .home-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: $text-color;
+            text-align: center;
+
+            h1 {
+                font-size: 5rem;
+                margin: 0;
+
+                a {
+                    color: $text-color;
+                    text-decoration: none;
+                }
+            }
+            p {
+                font-size: 1.2rem;
+                font-style: italic;
+                margin: 10px 0 0 0;
+            }
+        }
     }
 
     .auth-form-container {
-        color: white;
+        color: $text-color;
         padding: 20px;
         height: 100%;
         width: 50%;
@@ -186,8 +338,7 @@ nav {
 
         h2 {
             color: $text-color;
-            text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .error-messages {
@@ -217,28 +368,65 @@ nav {
         left: 50%;
         transform: translate(-50%, -50%);
         width: 80%;
-
+        
         input[type="text"],
         input[type="password"],
         input[type="email"] {
-            width:100%;
-            padding: 10px;
+            width: 100%;
+            padding: 5px 0; // Reduced vertical padding, no horizontal padding
             margin-bottom: 10px;
-            border: 1px solid #ccc;
+            border: none; // Remove all borders
+            border-bottom: 1px solid white; // Add only bottom border
+            background-color: transparent; // Make background transparent
+            outline: none; // Remove outline on focus
+            color: white; // Assuming text color should be white in dark theme
+        } 
+
+        input::placeholder {
+                color: $sub-text-color; // Lighter color for placeholder
+        }
+
+        .form-field {
+            margin-bottom: 10px;
         }
 
         .submit-button {
             width: 100%;
             padding: 10px;
-            background-color: $sub-color;
+            background-color: $hover-color;
             color: $text-color;
             border: none;
             cursor: pointer;
+            margin-top: 10px; // Add margin to the top
         }
+
+        .toggle-password {
+            color: $accent-color;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+
+            input[type="checkbox"] {
+                width: auto;
+                margin-right: 10px;
+            }
+
+            label {
+                margin-bottom: 0;
+            }
+        }
+
 
         label {
             display: block;
             margin-bottom: 5px;
+        }
+
+        a {
+            color: $accent-color;
         }
     }
 }
@@ -254,7 +442,7 @@ nav {
         color: #212529;
     }
     
-    .auth-form {
+    .upload-form {
         border: none;
         color: #212529;
         position: static; // Override absolute positioning
@@ -263,6 +451,15 @@ nav {
         height: 100%;
         overflow-y: auto; // Add scroll for long forms
         padding: 0 20px 10px 20px;
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width:100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
         
         h2 {
             color: #212529;
@@ -337,6 +534,7 @@ nav {
     right: 0;
     margin: auto;
     width: 80%;
+    margin-top: 20px;
     margin-bottom: 10px;
 
     input {
@@ -350,6 +548,7 @@ nav {
     display: flex;
     gap: 20px; 
     align-items: flex-end; 
+    margin-top: 20px;
 }
 
 .category-checkboxes {
@@ -391,13 +590,14 @@ nav {
     }
 
     &.active {
-        opacity: 0.7;
+        opacity: 1;
     }
 }
 
 .hold-button {
     @extend %btn-base;
     border-radius: 5px;
+    padding: 2px 10px 2px 10px;
 
     &:hover {
         animation: Shake 0.7s;
@@ -407,7 +607,7 @@ nav {
 
 .unhold-button {
     @extend .hold-button;
-    opacity: 0.7;
+    opacity: 1;
 }
 
 /* --- Item List --- */
@@ -459,7 +659,7 @@ nav {
 
     /* Styling for watched items */
     .item.is-watched {
-        border-left: 5px solid #ffc107; /* A thick yellow left border for emphasis */
+        border-left: 5px solid $accent-color; /* A thick yellow left border for emphasis */
         animation: LeftRightShake 0.7s;
     }
 }
@@ -473,6 +673,54 @@ nav {
         padding-bottom: 0.5rem;
         margin-bottom: 1rem;
     }
+}
+
+/* --- Horizontal Menu --- */
+.horizontal-menu {
+    display: none;
+    background-color: $sub-color;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+
+    &.show {
+        display: flex;
+        gap: 20px;
+    }
+
+    a {
+        color: $text-color;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: $acc-color;
+        }
+    }
+}
+
+/* --- Sticky Upload Button --- */
+.sticky-upload-btn {
+    display: none; // Hidden by default
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: $accent-color;
+    color: white;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+// Hide sticky upload button on the upload page
+.upload-page .sticky-upload-btn {
+    display: none;
 }
 
 /*
@@ -518,7 +766,7 @@ nav {
         gap: 15px;
         width: 100%;
         border: 1px solid #ddd;
-        padding: 15px;
+        padding: 10px;
         border-radius: 5px;
         margin-top: 5px;
 
@@ -535,5 +783,46 @@ nav {
         .image-preview-container {
             width: 100%;
         }
+    }
+
+    // Styles for auth pages on smaller screens
+    .auth-container {
+        flex-direction: column;
+
+        .home-container {
+            display: none; // Hide the home container
+        }
+
+        .auth-form-container {
+            width: 100%;
+        }
+    }
+
+    // Hide desktop upload link and show sticky button on mobile
+    .desktop-upload-link,
+    nav .vertical-line {
+        display: none;
+    }
+
+    .sticky-upload-btn {
+        display: flex;
+    }
+
+    .explanation {
+        flex-direction: column;
+        top: 0;
+        padding-bottom: 10px;
+
+        div {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+
+}
+
+@media (max-width: 1400px) {
+    .gallery {
+        max-width: 1000px; // Ensure all 5 cards fit in one row
     }
 }

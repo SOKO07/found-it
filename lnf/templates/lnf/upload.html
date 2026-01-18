@@ -1,10 +1,12 @@
 {% extends "lnf/navbase.html" %}
 
+{% block body_class %}upload-page{% endblock %}
+
 {% block content %}
 {% load static %}
 <div class="auth-container upload-page">
   <div class="auth-form-container">  
-    <div class="auth-form">
+    <div class="upload-form">
       <h2>Upload an Item</h2>
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -92,7 +94,7 @@
       <span id="previewText">Upload Image for Preview</span>
     </div>
   </div>
-</div>
+</div><br>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

@@ -142,6 +142,12 @@ class Login(LoginView):
     form_class = LoginForm
     template_name = 'registration/login.html'
 
+    def form_valid(self, form):
+        remember_me = form.cleaned_data.get('remember_me')
+        if not remember_me:
+            self.request.session.set_expiry(0)  # Expire session on browser close
+        return super().form_valid(form)
+
 @login_required
 def profile(request):
     uploaded_items = request.user.uploaded_items.all()
@@ -177,4 +183,13 @@ def delete_item(request, item_id):
 @login_required
 def go_to_my_uploads(request):
     return redirect('lnf:profile')
+
+def about(request):
+    return render(request, 'lnf/info/about.html')
+
+def features(request):
+    return render(request, 'lnf/info/features.html')
+
+def contact(request):
+    return render(request, 'lnf/info/contact.html')
 

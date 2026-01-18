@@ -3,10 +3,16 @@
 
 {% block content %}
 <div class="auth-container">
-  <img src="{% static 'lnf/images/home.png' %}" class="home-img">
+  <div class="home-container">
+    <img src="{% static 'lnf/images/home.png' %}" alt="My Image">
+    <div class="home-logo">
+      <h1><a href="{% url 'lnf:index' %}">FOUND IT</a></h1>
+      <p>WHERE LOST ITEMS FIND THEIR WAY BACK</p>
+    </div>
+  </div>
   <div class="auth-form-container float-start">
     <div class="auth-form">
-      <h2>Sign up</h2>
+      <h2>Create Account</h2>
       <form method="post">
         {% csrf_token %}
         {% for field in form %}
@@ -32,8 +38,10 @@
             {% endfor %}
           </div>
         {% endif %}
-        <button class="submit-button" type="submit">Sign up</button>
+        <button class="submit-button" type="submit">Sign Up</button>
       </form>
+      <br>
+      <p>Already have an account? <a href="{% url 'lnf:login' %}">Log In</a></p>
     </div>
   </div>
 </div>

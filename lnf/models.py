@@ -27,8 +27,8 @@ class PendingCategory(models.Model):
 
 class Item(models.Model):
     STATUS_CHOICES = [
-        ('not_at_repository', 'Not at Repository'),
-        ('at_repository', 'At Repository'),
+        ('not_at_repository', 'Not at Prefect Office'),
+        ('at_repository', 'At Prefect Office'),
         ('retrieved', 'Retrieved'),
     ]
 
