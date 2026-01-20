@@ -61,8 +61,8 @@ class ItemForm(forms.ModelForm):
         # For non-admin users, limit the status choices.
         if user and not user.is_staff:
             self.fields['status'].choices = [
-                ('not_at_repository', 'Not at Repository'),
-                ('at_repository', 'At Repository'),
+                ('not_at_repository', 'Not at Prefect Office'),
+                ('at_repository', 'At Prefect Office'),
             ]
 
 
