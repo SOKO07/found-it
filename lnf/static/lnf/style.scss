@@ -23,7 +23,7 @@ Contents:
 1. Variables
 ==============================================
 */
-$text-size : 18px;
+$text-size : 20px;
 $text-color : white;
 $sub-text-color : #cbcbcb;
 $main-color : #2B3666;
@@ -31,6 +31,23 @@ $sub-color : #282F4E;
 $accent-color : #ffc107/*#F68748*/;
 $acc-color : #5854b5;
 $hover-color : #3C4A99;
+
+@font-face {   
+    font-family: 'title';
+    src: url('fonts/Anton-Regular.ttf') format('truetype');
+}
+
+@font-face {   
+    font-family: 'mukta';
+    src: url('fonts/Mukta-Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {   
+    font-family: 'mukta';
+    src: url('fonts/Mukta-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
 
 /*
 ==============================================
@@ -41,6 +58,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'mukta', sans-serif;
 }
 
 div {
@@ -59,7 +77,6 @@ div {
 @keyframes LeftRightShake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
-
     100% { transform: translateX(0); }
 }
 
@@ -67,7 +84,6 @@ div {
     0% { transform: rotate(0); }
     25% { transform: rotate(-5deg); }
     50% { transform: rotate(5deg); scale: 1.1;}
-    75% { transform: rotate(-5deg); scale: 1.1;}
     100% { transform: rotate(0); scale: 1.1;}
 }
 
@@ -153,6 +169,8 @@ nav {
     }
 
     .navbar-brand .h1 {
+        letter-spacing: 2px;
+        font-weight: bold;
         color: $text-color;
         font-size: ($text-size + 12px);
     }
@@ -180,6 +198,7 @@ nav {
     color: $text-color;
 
     >h1 {
+        font-weight: bold;
         font-size: 5rem;
         margin: 0;
 
@@ -312,6 +331,7 @@ nav {
             text-align: center;
 
             h1 {
+                font-weight: bold;
                 font-size: 5rem;
                 margin: 0;
 
@@ -600,7 +620,7 @@ nav {
     padding: 2px 10px 2px 10px;
 
     &:hover {
-        animation: Shake 0.7s;
+        animation: Shake 0.5s;
         animation-fill-mode: forwards;
     }
 }
@@ -741,6 +761,7 @@ nav {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 15px;
+        margin-bottom: 50px;
 
         &.list-view .list-header {
             display: none;

@@ -45,6 +45,13 @@ class ItemForm(forms.ModelForm):
         label="Category",
         widget=forms.TextInput(attrs={'list': 'category-list', 'placeholder': 'Click to see categories..'})
     )
+    description = forms.CharField(
+        required=True,
+        widget=forms.Textarea(attrs={'rows': 2}),
+    )
+    image = forms.ImageField(
+        required=True,
+    )
 
     class Meta:
         model = Item
@@ -58,12 +65,10 @@ class ItemForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super(ItemForm, self).__init__(*args, **kwargs)
         
-        # For non-admin users, limit the status choices.
+        # For non-admin users, remove the status field.
         if user and not user.is_staff:
-            self.fields['status'].choices = [
-                ('not_at_repository', 'Not at Prefect Office'),
-                ('at_repository', 'At Prefect Office'),
-            ]
+            if 'status' in self.fields:
+                del self.fields['status']
 
 
 class ItemFilterForm(forms.Form):
