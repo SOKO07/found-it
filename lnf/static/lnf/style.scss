@@ -165,7 +165,7 @@ nav {
     .vertical-line {
         display: inline-block;
         border-left: 1px solid $text-color;
-        height: ($text-size + 12px);
+        height: ($text-size + 10px);
     }
 
     .navbar-brand .h1 {
@@ -185,61 +185,84 @@ nav {
     }
 }
 
-
-.bg-img {
-    width: 100%;
-    min-height: 600px; // Changed from height
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-image: url("images/home.png");
-    padding: 20px 20px 80px 20px; // Added padding-bottom
+.info-container {
     text-align: center;
-    color: $text-color;
 
     >h1 {
         font-weight: bold;
         font-size: 5rem;
-        margin: 0;
-
+        margin-top: 20px;
+        color: $main-color;
             a {
-                color: $text-color;
+                color: $main-color;
                 text-decoration: none;
             }
         }
     >p {
         font-size: 1.2rem;
         font-style: italic;
-        margin: 10px 0 0 0;
+        margin-top: 4px;
+    }
+}
+
+.title {
+    @extend .info-container;
+    padding: 200px 0 300px 0;
+}
+
+.sub-title {
+    @extend .info-container;
+    padding: 100px 0 50px 0;
+}
+
+.bg-img {
+    height: 350px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-image: url("images/upload.png");
+    text-align: center;
+    color: $text-color;
+}
+
+.bg-img-second {
+    @extend .bg-img;
+    background-image: url("images/home.png");
+}
+
+.v-m {
+    height: 100%;
+    padding: 50px;
+    text-align: left;
+    position: relative;
+
+    h4 {
+        margin-top: 20px;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    p {
+        width: 90%;
+        margin-top: 0;
+        font-size: 1.2rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
 }
 
 .gallery {
-    margin-top: 20px;
-    position: relative;
+    height: 350px;
     width: 100%;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;       // Revert to flexbox
-    flex-wrap: wrap;     // Allow wrapping
-    justify-content: center; // Center items
-    gap: 20px;           // Keep gap
+    display: flex;
 }
 
 .gallery-card {
-    display: inline-block;
-    width: 250px;
+    width: 350px;
     height: 350px;
     position: relative;
-    overflow: hidden;
-    transition: top 0.5s, transform 0.5s;
-
-    span {
-        font-style: italic;
-        font-size: smaller;
-    }
 
     img {
         width: 100%;
@@ -248,59 +271,99 @@ nav {
     }
 }
 
-.gallery-card:hover {
-    transform: scale(1.1);
-}
-
 .overlay {
     position: absolute;
-    top: 100%;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background: rgb(0, 0, 0, 0.5);
-    color: white;
-    transition: all 0.5s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    transition: opacity 0.3s ease;
+    
+    p {
+        font-weight: bold;
+        width: 100%;
+        color: $text-color;
+        position: absolute;
+        top: 90%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
 
-.big-content-text {
-    text-align: center;
-    font-size: 20px;
-    margin: 0;
-}
-
-.gallery-card:hover .overlay {
-    top: 0;
-}
-
-.explanation {
-    width: 80%;
-    display: flex;
-    margin: auto;
-    position: relative;
-    top: -55px;
-    justify-content: space-evenly;
-    text-align: justify;
-    color: $text-color;
-
-    div {
-        width: 40%;
-        background-color: $sub-color;
-        border-radius: 10px;
-        padding: 20px;
-        border: 2px solid $accent-color;
-        opacity: 0.95;
-
-        h4 {
-            margin-bottom: 14px;
-            font-weight: bold;
-            text-align: center;
-        }
+    span {
+        font-weight: normal;
     }
 }
 
+.overlay:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.contact-cards {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding-bottom: 100px;
+    gap: 20px;
+}
+
+.contact-card {
+    @extend .bg-img;
+    width: 25%;
+    transition: all, 0.5s;
+    position: relative;
+    border-radius: 20px;
+}
+
+.contact-card-second {
+    @extend .bg-img;
+    background-image: url("images/home.png");
+    width: 25%;
+    transition: all, 0.5s;
+    position: relative;
+    border-radius: 20px
+}
+
+.contact-card:hover, .contact-card-second:hover {
+    transform: scale(0.9)
+}
+
+.contact-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $text-color;;
+    text-align: center;
+
+    p {
+        font-weight: bold;
+        margin-top: 20px;
+        font-size: 1.2rem;
+    }
+}
+
+.start-now {
+    font-size: 2rem;
+    text-align: center;
+    margin: 40px 0;
+    
+    a {
+        text-decoration: none;
+        color: $accent-color;
+        border: 4px solid $main-color;
+        padding: 10px 20px;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            background-color: $hover-color;
+            border-color: $hover-color;
+            color: $text-color;
+        }
+    }
+}
 
 /* --- Auth (Login/Signup) --- */
 .auth-container {
@@ -721,7 +784,7 @@ nav {
 
 /* --- Sticky Upload Button --- */
 .sticky-upload-btn {
-    display: none; // Hidden by default
+    display: flex;
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -736,6 +799,14 @@ nav {
     text-decoration: none;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     z-index: 1000;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: darken($accent-color, 5%);
+        transform: scale(1.1);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        color: white;
+    }
 }
 
 // Hide sticky upload button on the upload page
@@ -751,6 +822,31 @@ nav {
 @media (max-width: 768px) {
     .options {
         flex-wrap: wrap;
+    }
+
+    .v-m {
+        padding: 20px;
+
+        p {
+            top: 60%;
+        }
+    }
+
+    .overlay {
+        p {
+            top: 80%;
+        }
+    }
+
+    .contact-cards {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 50px;
+    }
+
+    .contact-card, .contact-card-second {
+        width: 80%;
+        height: 250px;
     }
 
     .view-toggle-buttons {
@@ -820,30 +916,14 @@ nav {
     }
 
     // Hide desktop upload link and show sticky button on mobile
-    .desktop-upload-link,
-    nav .vertical-line {
+
+    #horizontal-menu-toggle {
         display: none;
     }
 
-    .sticky-upload-btn {
+    .horizontal-menu {
         display: flex;
-    }
-
-    .explanation {
-        flex-direction: column;
-        top: 0;
-        padding-bottom: 10px;
-
-        div {
-            width: 100%;
-            margin-top: 10px;
-        }
-    }
-
-}
-
-@media (max-width: 1400px) {
-    .gallery {
-        max-width: 1000px; // Ensure all 5 cards fit in one row
+        justify-content: center;
+        gap: 20px;
     }
 }

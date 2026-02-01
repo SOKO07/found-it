@@ -193,3 +193,6 @@ def features(request):
 def contact(request):
     return render(request, 'lnf/info/contact.html')
 
+def full_info(request):
+    return render(request, 'lnf/info/full_info.html')
+

@@ -14,18 +14,18 @@
       <a href="{% url 'lnf:index' %}" class="navbar-brand"><span class="h1">Found IT</span></a>
       <button id="horizontal-menu-toggle" class="btn btn-link text-white"><i class="fas fa-angle-down"></i></button>
       <div class="grow"></div>
-      <div class="me-3 desktop-upload-link"><a href="{% url 'lnf:upload' %}">Upload Item</a></div>
-      <span class="vertical-line"></span>
-      <div class="login ms-3 me-1">
+      <div class="login ms-3 me-1 d-flex align-items-center">
         {% if user.is_authenticated %}
             <form action="{% url 'lnf:logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="logout-button"><span>Log Out</span></button>
             </form>
-            <span class="ms-1 fw-bold" title="profile">Hi <a href="{% url 'lnf:profile' %}" style="text-decoration: underline;">{{ user.username }}</a>!</span>
+            <span class="vertical-line mx-2"></span>
+            <span class="fw-bold" title="profile">Hi <a href="{% url 'lnf:profile' %}" style="text-decoration: underline;">{{ user.username }}</a>!</span>
         {% else %}
-            <a href="{% url 'lnf:login' %}" class="ms-1">Log In</a>
-            <a href="{% url 'lnf:signup' %}" class="ms-1">Sign Up</a>
+            <a href="{% url 'lnf:login' %}">Log In</a>
+            <span class="vertical-line mx-2"></span>
+            <a href="{% url 'lnf:signup' %}">Sign Up</a>
         {% endif %}
       </div>
     </nav>
@@ -36,7 +36,7 @@
     </div>
 
     <br>
-  <div class="container-fluid">  
+  <div class="{% block container_class %}container-fluid{% endblock %}">  
     {% block content %}
     {% endblock %}
   </div>

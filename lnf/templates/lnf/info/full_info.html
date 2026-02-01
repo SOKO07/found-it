@@ -1,0 +1,111 @@
+{% extends "lnf/base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- About Section -->
+<div class="info-container">
+    <div class="title">
+        <h1 title="Start Now"><a href="{% url 'lnf:index' %}">FOUND IT</a></h1>
+        <p>WHERE LOST ITEMS FIND THEIR WAY BACK</p>
+    </div>
+    <div class="bg-img" >
+        <div class="v-m">
+            <h4>Our Vision</h4>
+            <p>Found IT envisions a future where owners instantly find their belongings without effort. Our goal is to inspire other institutions to integrate our system within their boundaries to ensure the certainty of recovering items.</p>
+        </div>
+    </div>
+    <div class="bg-img-second">
+        <div class="v-m">
+            <h4>Our Mission</h4>
+            <p>Our mission is to offer a reliable and user-friendly website that assists users in recovering their items efficiently. We attempt to provide an innovative approach to handling lost items, ensuring users can regain them quickly. At Found It, we believe that technology can reshape the standard of lost and found methods.</p>
+        </div>
+    </div>
+
+    <div class="sub-title">
+        <h1>The Crew</h1>
+        <p>from STEM 12T</p>
+    </div>
+
+    <div class="gallery">
+        <div class="gallery-card">
+            <img src="/static/lnf/images/PFP/Cocoy.jfif">
+            <div class="overlay">
+                <p class="big-content-text">Ace Justin D. Cocoy<br><span>Researcher</span></p>
+            </div>
+        </div>
+        <div class="gallery-card">
+            <img src="/static/lnf/images/PFP/Gonzales.jpg">
+            <div class="overlay">
+                <p class="big-content-text">Blessed Czarhuelle V. Gonzales<br><span>Content Writer</span></p>
+            </div>
+        </div>
+        <div class="gallery-card">
+            <img src="/static/lnf/images/PFP/Lee.jpg">
+            <div class="overlay"> 
+                <p class="big-content-text">Seokho Lee<br><span>Chairman / Web Developer</span></p>
+            </div>
+        </div>
+        <div class="gallery-card">
+            <img src="/static/lnf/images/PFP/Mejica.jpg">
+            <div class="overlay">
+                <p class="big-content-text">Reighman E. Mejica<br><span>Co-Chairman</span></p>
+            </div>
+        </div>
+        <div class="gallery-card">
+            <img src="/static/lnf/images/PFP/Villaruel.jpg">
+            <div class="overlay">
+                <p class="big-content-text">Lyan Antonia B. Villaruel<br><span>Graphic Designer</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="sub-title">
+        <h1>Features</h1>
+    </div>
+</div>
+
+
+<!-- Features Section -->
+<div class="container">
+    
+    <div class="ratio ratio-16x9">
+        <video controls autoplay controlsList="nodownload" oncontextmenu="return false;" class="rounded shadow">
+            <source src="{% static 'lnf/videos/Found-IT-Tuto.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</div>
+
+<br><br>
+
+<!-- Contact Section -->
+<div class="info-container">
+    <div class="sub-title">
+        <h1>Contact Us</h1>
+    </div>
+    <div class="contact-cards">
+        <div class="contact-card">
+            <div class="contact-text">
+                <i class="fa-brands fa-facebook fa-4x"></i>
+                <p>FoundIT</p>
+            </div>
+        </div>
+        
+        <div class="contact-card-second">
+            <div class="contact-text">
+                <i class="fa-solid fa-envelope fa-4x"></i>
+                <p>FoundIT.contact@gmail.com</p>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <div class="contact-text">
+                <i class="fa-brands fa-instagram fa-4x"></i>
+                <p>@foundit.STEM12T</p>
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        <h1 title="Start Now" class="start-now"><a href="{% url 'lnf:index' %}">START NOW</a></h1>
+    </div>
+</div>
+{% endblock %}
