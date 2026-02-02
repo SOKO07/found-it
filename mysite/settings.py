@@ -27,6 +27,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# AWS / Production Settings
+# -------------------------
+# Trust the header set by the AWS Load Balancer to determine if the request is secure (HTTPS).
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# If you are seeing CSRF errors, you likely need to add your domain here.
+# Example: CSRF_TRUSTED_ORIGINS = ['https://yourdomain.com']
+CSRF_TRUSTED_ORIGINS = [] 
+
 
 # Application definition
 

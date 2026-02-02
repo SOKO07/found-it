@@ -159,6 +159,24 @@ nav .logout-button {
   font-style: italic;
   margin-top: 4px;
 }
+.info-container .start-now, .sub-title .start-now, .title .start-now {
+  font-size: 2rem;
+  text-align: center;
+  margin: 40px 0;
+}
+.info-container .start-now a, .sub-title .start-now a, .title .start-now a {
+  text-decoration: none;
+  color: #5854b5;
+  border: 4px solid #2B3666;
+  padding: 10px 20px;
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.info-container .start-now a:hover, .sub-title .start-now a:hover, .title .start-now a:hover {
+  background-color: #3C4A99;
+  border-color: #3C4A99;
+  color: white;
+}
 
 .title {
   padding: 200px 0 300px 0;
@@ -287,25 +305,6 @@ nav .logout-button {
   font-weight: bold;
   margin-top: 20px;
   font-size: 1.2rem;
-}
-
-.start-now {
-  font-size: 2rem;
-  text-align: center;
-  margin: 40px 0;
-}
-.start-now a {
-  text-decoration: none;
-  color: #ffc107;
-  border: 4px solid #2B3666;
-  padding: 10px 20px;
-  border-radius: 20px;
-  transition: all 0.3s ease-in-out;
-}
-.start-now a:hover {
-  background-color: #3C4A99;
-  border-color: #3C4A99;
-  color: white;
 }
 
 /* --- Auth (Login/Signup) --- */
@@ -842,5 +841,11 @@ nav .logout-button {
     display: flex;
     justify-content: center;
     gap: 20px;
+  }
+  .info-container > h1, .title > h1, .sub-title > h1 {
+    font-size: 4rem;
+  }
+  .info-container .start-now, .title .start-now, .sub-title .start-now {
+    font-size: 3rem;
   }
 }/*# sourceMappingURL=style.css.map */

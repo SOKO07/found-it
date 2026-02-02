@@ -203,6 +203,27 @@ nav {
         font-style: italic;
         margin-top: 4px;
     }
+
+    .start-now {
+        font-size: 2rem;
+        text-align: center;
+        margin: 40px 0;
+        
+            a {
+                text-decoration: none;
+                color: $acc-color;
+                border: 4px solid $main-color;
+                padding: 10px 20px;
+                border-radius: 20px;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: $hover-color;
+                    border-color: $hover-color;
+                    color: $text-color;
+                }
+            }
+        }
 }
 
 .title {
@@ -341,27 +362,6 @@ nav {
         font-weight: bold;
         margin-top: 20px;
         font-size: 1.2rem;
-    }
-}
-
-.start-now {
-    font-size: 2rem;
-    text-align: center;
-    margin: 40px 0;
-    
-    a {
-        text-decoration: none;
-        color: $accent-color;
-        border: 4px solid $main-color;
-        padding: 10px 20px;
-        border-radius: 20px;
-        transition: all 0.3s ease-in-out;
-
-        &:hover {
-            background-color: $hover-color;
-            border-color: $hover-color;
-            color: $text-color;
-        }
     }
 }
 
@@ -925,5 +925,16 @@ nav {
         display: flex;
         justify-content: center;
         gap: 20px;
+    }
+
+
+    .info-container {
+        >h1 {
+            font-size: 4rem;
+        }
+
+        .start-now {
+            font-size: 3rem;
+        }
     }
 }
