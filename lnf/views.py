@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.contrib import messages
 from django.db.models import Q, Case, When, Value, BooleanField
 from django.db.models.functions import Lower
 from django.http import JsonResponse
@@ -117,6 +118,7 @@ def upload(request):
                 item.pending_category_name = pending_category.name
             
             item.save()
+            messages.success(request, 'Thank you for your honesty. Please proceed to the Liceo Prefect Office to surrender the item.')
             return redirect('lnf:index')
     else:
         form = ItemForm(user=request.user)
