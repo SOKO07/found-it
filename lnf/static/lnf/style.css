@@ -167,8 +167,8 @@ nav .logout-button {
 }
 .info-container .start-now a, .sub-title .start-now a, .title .start-now a {
   text-decoration: none;
-  color: #5854b5;
-  border: 4px solid #2B3666;
+  color: #ffc107;
+  border: 6px solid #2B3666;
   padding: 10px 20px;
   border-radius: 20px;
   transition: all 0.3s ease-in-out;
@@ -179,8 +179,13 @@ nav .logout-button {
   color: white;
 }
 
+.logo-img {
+  width: 800px;
+  height: auto;
+}
+
 .title {
-  padding: 300px 0 400px 0;
+  padding: 200px 0 200px 0;
 }
 
 .sub-title {
@@ -362,6 +367,10 @@ nav .logout-button {
   transform: translate(-50%, -50%);
   color: white;
   text-align: center;
+}
+.auth-container .home-container .home-logo .logo-img {
+  width: 500px;
+  height: auto;
 }
 .auth-container .home-container .home-logo h1 {
   font-weight: bold;
@@ -592,7 +601,9 @@ nav .logout-button {
 }
 
 #collapsible-filters {
-  display: contents; /* Preserves flex layout on desktop */
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
 }
 
 /* --- Buttons --- */

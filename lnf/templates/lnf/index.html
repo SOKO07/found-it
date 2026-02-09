@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Add current viewMode to parameters for API call
         params.append('viewMode', localStorage.getItem('viewMode') || 'list'); // Pass current viewMode to API
+        params.append('_', new Date().getTime()); // Cache buster for Safari
 
         const url = `${apiURL}?${params.toString()}`;
 
@@ -177,15 +178,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const debouncedUpdate = debounce(updateItems, 300);
 
-    form.addEventListener('keyup', function(event) {
+    form.addEventListener('input', function(event) {
         if (event.target.name === 'q') {
             debouncedUpdate();
+        } else {
+            updateItems();
         }
     });
 
     form.addEventListener('change', function(event) {
-        // Handles checkboxes, date picker, and select dropdown
-        updateItems();
+        // Backup for browsers that don't trigger 'input' on select/checkboxes
+        if (event.target.name !== 'q') {
+            updateItems();
+        }
     });
 
     let wasDesktop = window.innerWidth > 768;
