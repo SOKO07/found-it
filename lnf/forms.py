@@ -56,6 +56,9 @@ class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['name', 'description', 'image', 'found_location', 'found_date', 'status']
+        labels = {
+            'name': 'Item Name',
+        }
         widgets = {
             'found_date': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 2}),
