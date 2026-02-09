@@ -83,27 +83,30 @@
         <h1>Contact Us</h1>
     </div>
     <div class="contact-cards">
-        <div class="contact-card">
+        <div class="contact-card copy-to-clipboard" data-copy="beu.g12prefect@usls.edu.ph">
             <div class="contact-text">
                 <i class="fa-solid fa-briefcase fa-4x"></i>
                 <p>Prefect Office</p>
                 <i>beu.g12prefect@usls.edu.ph</i>
+                <div class="copy-badge">Click to Copy</div>
             </div>
         </div>
         
-        <div class="contact-card-second">
+        <div class="contact-card-second copy-to-clipboard" data-copy="s1310961@usls.edu.ph">
             <div class="contact-text">
                 <i class="fa-solid fa-envelope fa-4x"></i>
                 <p>Website Inquiries</p>
                 <i>s1310961@usls.edu.ph</i>
+                <div class="copy-badge">Click to Copy</div>
             </div>
         </div>
 
-        <div class="contact-card">
+        <div class="contact-card copy-to-clipboard" data-copy="l.escandallo@usls.edu.ph">
             <div class="contact-text">
                 <i class="fa-solid fa-magnifying-glass fa-4x"></i>
                 <p>Research Advisor</p>
                 <i>l.escandallo@usls.edu.ph</i>
+                <div class="copy-badge">Click to Copy</div>
             </div>
         </div>
     </div>
@@ -111,4 +114,23 @@
         <h2 title="Start Now" class="start-now"><a href="{% url 'lnf:index' %}">START NOW</a></h1>
     </div>
 </div>
+
+<script>
+document.querySelectorAll('.copy-to-clipboard').forEach(card => {
+    card.addEventListener('click', () => {
+        const textToCopy = card.getAttribute('data-copy');
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const badge = card.querySelector('.copy-badge');
+            const originalText = badge.innerText;
+            badge.innerText = 'Copied!';
+            badge.classList.add('copied');
+            
+            setTimeout(() => {
+                badge.innerText = originalText;
+                badge.classList.remove('copied');
+            }, 2000);
+        });
+    });
+});
+</script>
 {% endblock %}
