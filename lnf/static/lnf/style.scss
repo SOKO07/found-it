@@ -228,7 +228,8 @@ nav {
 }
 
 .logo-img {
-    width: 800px;
+    width: 50%;
+    min-width: 450px;
     height: auto;
 }
 
@@ -699,7 +700,7 @@ nav {
 #collapsible-filters {
     display: flex;
     gap: 20px;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 /* --- Buttons --- */
